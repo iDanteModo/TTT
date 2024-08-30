@@ -1,6 +1,5 @@
 const gameBoard = {};
 const players = {};
-let round = 0;
 
      function startGame() {
         getPlayersNames();
@@ -27,23 +26,22 @@ function getPlayersNames() {
     player2Display.appendChild(player2Name);
 }
 
-function roundCount(round){
-    round++;
-    return round;
-}
-
 function getPlayerChoice() {
     const squares = document.querySelectorAll('p');
+    let round = 0;
     squares.forEach(square => {
         square.addEventListener('click', () => {
             if(round % 2 == 0 && square.dataset.x == null && square.dataset.o == null){
                 square.classList.add('white');
                 square.dataset.x = true;
-                roundCount(round);
+                round ++;
             }else if (round % 2 != 0 && square.dataset.x == null && square.dataset.o == null) {
                 square.classList.add("purple");
                 square.dataset.o = true;
-                roundCount(round);
+                round ++;
+            }else if(round == 9){
+                round =0;
+                gameOver();
             }
         checkGameState();
         })
