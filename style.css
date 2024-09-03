@@ -76,6 +76,17 @@ body {
   text-align: center;
 }
 
+.buttons {
+  grid-column: 3;
+  grid-row: 5;
+  align-self: self-start;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 2rem;
+}
+
 .white {
   background-color: white;
 }

@@ -1,16 +1,6 @@
 const gameBoard = {};
 const players = {};
 
-     function startGame() {
-        getPlayersNames();
-        getPlayerChoice();
-        updateBoard();
-        checkGameState();
-        gameOver();
-        playersScore();
-        boardReset();
-    }
-
 function getPlayersNames() {
     let player1 = prompt("Player 1");
     players["Player 1"] = player1
@@ -26,24 +16,34 @@ function getPlayersNames() {
     player2Display.appendChild(player2Name);
 }
 
-function getPlayerChoice() {
+function getPlayerChoice(round = 0) {
     const squares = document.querySelectorAll('p');
-    let round = 0;
     squares.forEach(square => {
         square.addEventListener('click', () => {
             if(round % 2 == 0 && square.dataset.x == null && square.dataset.o == null){
                 square.classList.add('white');
                 square.dataset.x = true;
                 round ++;
+                let p1,p2 = checkGameState();
+                if(p1){
+                    round =0;
+                }else if(p2){
+                    round =0;
+                }
             }else if (round % 2 != 0 && square.dataset.x == null && square.dataset.o == null) {
                 square.classList.add("purple");
                 square.dataset.o = true;
                 round ++;
+                let p1,p2 = checkGameState();
+                if(p1){
+                    round =0;
+                }else if(p2){
+                    round =0;
+                }
             }else if(round == 9){
-                round =0;
+                round = 0;
                 gameOver();
             }
-        checkGameState();
         })
     })
 }
@@ -125,26 +125,48 @@ function boardReset() {
 function gameOver(p1Win, p2Win) {
     if(p1Win){
         alert(`WHITE WON!`)
+        boardReset();
+        checkGameState(0);
+        return true;
     }else if(p2Win){
         alert(`PURPLE WON!`)
-    }else {
-        alert("DRAW")
+        boardReset();
+        checkGameState(0);
+        return true;
+    }else if(!p1Win && !p2Win) {
+        checkGameState(0);
+        alert("Draw");
     }
-    playAgain();
 }
 
 function playAgain(){
-    if(confirm("Play Again ?")){
-        boardReset()
-    } else {
-        alert("Ciao");
-    }
+    const newPlay = document.querySelector('#playAgain')
+    newPlay.addEventListener('click', () => {
+        boardReset();
+        getPlayerChoice();
+    })
 }
 
-getPlayerChoice();
-getPlayersNames();
+function changePlayers(){
+    const newPlayers = document.querySelector('#changePlayers')
+        newPlayers.addEventListener('click', () => {
+            const player1Display = document.querySelector(".player1 h1");
+            const player2Display = document.querySelector(".player2 h1");
+            player1Display.remove();
+            player2Display.remove();
+            getPlayersNames();
+        })
+    }
 
+function playGame(){
+    newGame = false;
+    getPlayersNames();
+    getPlayerChoice();
+    playAgain();
+    changePlayers();
+}
 
+playGame();
 
 
 // To implement
@@ -153,3 +175,4 @@ getPlayersNames();
 // Keep score in each player object
 // Keep also every move in player object
 // Ability to see game history 
+
