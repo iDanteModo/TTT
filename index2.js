@@ -3,31 +3,21 @@ const game = (function(){
     let round = 0;
     const getPlayerNames =  () =>{ p1.name = prompt("player 1 name"); p2.name = prompt('player 2 name');}
     const showPlayerNames = () => { 
-        const displayP1 = document.querySelector(".player1");
-        const displayP2 = document.querySelector(".player2");
-        const p1name = document.createElement('h1');
-        const p2name = document.createElement('h1');
-        p1name.textContent = p1.name;
-        p2name.textContent= p2.name;
-        displayP1.appendChild(p1name);
-        displayP2.appendChild(p2name);
+        updateDOM('.player1', `<h1>${p1.name}<h1>`);
+        updateDOM('.player2', `<h1>${p2.name}<h1>`);
+    }
+    const updateDOM = (selector, content) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.innerHTML = content;
+        }
     }
     const showPlayerScores = () => {
-        const p1ScoreDisplay = document.querySelector('.player1Score');
-        const p2ScoreDisplay = document.querySelector('.player2Score');
-        const p1Score = document.createElement('h3');
-        const p2Score = document.createElement('h3');
-        p1Score.textContent = p1.score;
-        p2Score.textContent = p2.score;
-        p1ScoreDisplay.appendChild(p1Score);
-        p2ScoreDisplay.appendChild(p2Score);
+        updateDOM('.player1Score', `<h3>${p1.score}<h3>`);
+        updateDOM('.player2Score', `<h3>${p2.score}<h3>`);
     }
     const updatePlayerScores = () => {
-        const p1ScoreDisplay = document.querySelector(".player1Score h3");
-        const p2ScoreDisplay = document.querySelector(".player2Score h3");
-        p1ScoreDisplay.remove();
-        p2ScoreDisplay.remove();
-        game.showPlayerScores();
+        showPlayerScores();
     }
     const assignMark = () => {p1.mark = 'X'; p2.mark = "O"}
     const assignScore = () => {p1.score = 0; p2.score = 0;}
@@ -148,19 +138,51 @@ const game = (function(){
     const changePlayers = () => {
         const changeNames = document.querySelector('#changePlayers');
             changeNames.addEventListener('click', () => {
-                const player1Display = document.querySelector(".player1 h1");
-                const player2Display = document.querySelector(".player2 h1");
-                player1Display.remove();
-                player2Display.remove();
+                document.querySelector(".player1 h1").remove();
+                document.querySelector(".player2 h1").remove();
                 game.getPlayerNames();
                 game.showPlayerNames();
                 game.assignScore();
             })
     }
+    const toggleAudio = () => {
+        const audio = document.querySelector(".icons");
+        const audioOn = document.querySelector(".volumeOn");
+        const audioOff = document.querySelector(".volumeOff");
+        const music = document.querySelector('#background-music');
+        let toggle = false;
+        audio.addEventListener("click", () => {
+            if(toggle === false ){
+                music.play();
+                audioOff.style.display = "none";
+                audioOn.style.display = "block"
+                toggle = true;
+            }else if (toggle === true) {
+                music.pause();
+                audioOff.style.display = "block";
+                audioOn.style.display = "none";
+                toggle = false;
+            }
+        })
+    }
+    const init = () => {
+        game.getPlayerNames();
+        game.showPlayerNames();
+        game.assignMark();
+        game.assignScore();
+        game.showPlayerScores();
+        game.playerMoves();
+        game.playAgain();
+        game.changePlayers();
+        game.toggleAudio();
+        game.stats();
+
+    }
     return {getPlayerNames, 
             showPlayerNames,
             showPlayerScores,
             updatePlayerScores,
+            updateDOM,
             assignMark,
             assignScore,
             addPoint, 
@@ -175,18 +197,14 @@ const game = (function(){
             boardReset, 
             playAgain,
             changePlayers,
-            stats};
+            stats,
+            toggleAudio,
+            init};
 })();
 
-game.getPlayerNames();
-game.showPlayerNames();
-game.assignMark();
-game.assignScore();
-game.showPlayerScores();
-game.playerMoves();
-game.playAgain();
-game.changePlayers();
-game.stats();
+document.addEventListener('DOMContentLoaded', () => {
+    game.init();
+});
 
 
 

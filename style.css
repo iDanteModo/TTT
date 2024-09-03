@@ -161,3 +161,19 @@ body {
   justify-self: stretch;
   border: 5px purple solid;
 }
+
+.icons {
+  grid-column: 2;
+  grid-row: 2;
+  filter: invert(100%);
+}
+
+.volumeOff,
+.volumeOn {
+  position: absolute;
+  width: 40%;
+}
+
+.volumeOn{
+  display: none;
+}
