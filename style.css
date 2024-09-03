@@ -25,8 +25,28 @@ img {
 
 /* DANTE CODE HERE -----------*/
 
+@font-face {
+  font-family: "8bit Arcade Out";
+  src: url(./Fonts/8-bit\ Arcade\ Out.ttf);
+}
+@font-face {
+  font-family: '8bit Arcade In';
+  src: url(./Fonts/8-bit\ Arcade\ In.ttf);
+}
+
 * {
     color-scheme: dark;
+}
+
+
+
+.title,
+.player1,
+.player2,
+.player1Score,
+.player2Score,
+.buttons {
+  font-family: "8bit Arcade In";
 }
 
 body {
@@ -41,7 +61,8 @@ body {
   grid-row: 2;
   align-self: center;
   justify-self: center;
-  font-size: 3rem;
+  font-size: 14rem;
+
 }
 
 .player1 {
@@ -49,7 +70,7 @@ body {
   grid-row: 3;
   align-self: center;
   justify-self: center;
-  font-size: 2rem;
+  font-size: 10rem;
 }
 
 .player2 {
@@ -57,50 +78,63 @@ body {
   grid-row: 3;
   align-self: center;
   justify-self: center;
-  font-size: 2rem;
+  font-size: 10rem;
+  color: purple;
 }
 
 .player1Score {
   grid-column: 2;
-  grid-row: 4;
+  grid-row: 3 / span 2;
   align-self: center;
   justify-self: center;
-  font-size: 7rem;
+  font-size: 13rem;
 }
 
 .player2Score {
   grid-column: 4;
-  grid-row: 4;
+  grid-row: 3 / span 2;
+  color: purple;
   align-self: center;
   justify-self: center;
-  font-size: 7rem;
+  font-size: 13rem;
 }
 
 .board {
   align-self: center;
   justify-self: center;
   grid-column: 3;
-  grid-row: 4;
+  grid-row: 3 / span 2 ;
   display: grid;
-  grid-template-columns: 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px;
+  grid-template-columns: 150px 150px 150px;
+  grid-template-rows: 150px 150px 150px;
 }
 
 .board p {
-  border: 1px white solid;
+  border: 1px darkgray solid;
   color: red;
   text-align: center;
 }
 
 .buttons {
-  grid-column: 3;
+  grid-column: 2 / span 3;
   grid-row: 5;
   align-self: self-start;
   justify-self: center;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  font-size: 2rem;
+}
+
+.buttons #playAgain,
+.buttons #changePlayers {
+  background-color: transparent;
+  border: transparent;
+  font-size: clamp(5rem, 2vw, 10rem);
+}
+
+.buttons #playAgain:hover,
+.buttons #changePlayers:hover {
+  color: purple;
+  cursor: pointer;
 }
 
 .white {
@@ -110,4 +144,20 @@ body {
 .purple {
   background-color: purple;
 
+}
+
+.p1Square {
+  grid-column: 2;
+  grid-row: 3 / span 2;
+  align-self: stretch;
+  justify-self: stretch;
+  border: 5px white solid;
+}
+
+.p2Square {
+  grid-column: 4;
+  grid-row: 3 / span 2;
+  align-self: stretch;
+  justify-self: stretch;
+  border: 5px purple solid;
 }
