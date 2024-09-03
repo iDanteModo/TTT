@@ -12,29 +12,50 @@ const game = (function(){
         displayP1.appendChild(p1name);
         displayP2.appendChild(p2name);
     }
+    const showPlayerScores = () => {
+        const p1ScoreDisplay = document.querySelector('.player1Score');
+        const p2ScoreDisplay = document.querySelector('.player2Score');
+        const p1Score = document.createElement('h3');
+        const p2Score = document.createElement('h3');
+        p1Score.textContent = p1.score;
+        p2Score.textContent = p2.score;
+        p1ScoreDisplay.appendChild(p1Score);
+        p2ScoreDisplay.appendChild(p2Score);
+    }
+    const updatePlayerScores = () => {
+        const p1ScoreDisplay = document.querySelector(".player1Score h3");
+        const p2ScoreDisplay = document.querySelector(".player2Score h3");
+        p1ScoreDisplay.remove();
+        p2ScoreDisplay.remove();
+        game.showPlayerScores();
+    }
     const assignMark = () => {p1.mark = 'X'; p2.mark = "O"}
+    const assignScore = () => {p1.score = 0; p2.score = 0;}
+    const addPoint = () => score++;
     const gameRound = () => round;
     const incrementRound = () => round++;
     const resetRound  = () => round = 0;
+    const click = (event) => {
+        const square = event.target;
+        if(round % 2 == 0 && square.dataset.x == null && square.dataset.o == null) {
+            square.classList.add("white");
+            square.dataset.x = true;
+            game.incrementRound();
+            game.checkGameState();
+            game.gameOver();
+        }else if (round % 2 != 0 && square.dataset.x == null && square.dataset.o == null) {
+            square.classList.add('purple');
+            square.dataset.o = true;
+            game.incrementRound();
+            game.checkGameState();
+            game.gameOver();
+        }
+    }
     const playerMoves = () => {
         const squares = document.querySelectorAll('p');
         squares.forEach(square => {
-            square.addEventListener("click", () => {
-                if(round % 2 == 0 && square.dataset.x == null && square.dataset.o == null) {
-                    square.classList.add("white");
-                    square.dataset.x = true;
-                    game.incrementRound();
-                    game.checkGameState();
-                    game.gameOver();
-                }else if (round % 2 != 0 && square.dataset.x == null && square.dataset.o == null) {
-                    square.classList.add('purple');
-                    square.dataset.o = true;
-                    game.incrementRound();
-                    game.checkGameState();
-                    game.gameOver();
-                }
-            })
-        })
+            square.addEventListener("click", click); 
+            })        
     }
     const stats = () => {console.table(p1); console.table(p2); console.log(`Round is ${round}`)}
     const checkGameState = () => {
@@ -88,17 +109,23 @@ const game = (function(){
         const [p1Win, p2Win] = checkGameState();
         if(p1Win) {
             console.log("White Won");
-            game.boardReset();
-            game.resetRound();
+            p1.score++;
+            game.gameFreeze();
         }else if(p2Win) {
             console.log("Purple Won");
-            game.boardReset();
-            game.resetRound();
+            p2.score++;
+            game.gameFreeze();
         }else if (!p1Win && !p2Win && round == 9) {
             console.log("DRAW");
-            game.boardReset();
-            game.resetRound();
+            game.gameFreeze();
         }
+        game.updatePlayerScores();
+     }
+     const gameFreeze = () => {
+        const squares = document.querySelectorAll('p');
+        squares.forEach(square => {
+            square.removeEventListener("click", click);
+        })
      }
      const boardReset = () => {
         const squares = document.querySelectorAll('p');
@@ -109,23 +136,56 @@ const game = (function(){
             square.classList.remove('purple');
         })
      }
+    const playAgain = () => {
+        const newGame = document.querySelector('#playAgain');
+        newGame.addEventListener("click", () => {
+            game.boardReset();
+            game.resetRound();
+            game.playerMoves();
+            game.updatePlayerScores();
+        })
+    }
+    const changePlayers = () => {
+        const changeNames = document.querySelector('#changePlayers');
+            changeNames.addEventListener('click', () => {
+                const player1Display = document.querySelector(".player1 h1");
+                const player2Display = document.querySelector(".player2 h1");
+                player1Display.remove();
+                player2Display.remove();
+                game.getPlayerNames();
+                game.showPlayerNames();
+                game.assignScore();
+            })
+    }
     return {getPlayerNames, 
-            showPlayerNames, 
-            assignMark, 
+            showPlayerNames,
+            showPlayerScores,
+            updatePlayerScores,
+            assignMark,
+            assignScore,
+            addPoint, 
             gameRound, 
             incrementRound, 
             resetRound, 
+            click,
             playerMoves, 
             checkGameState, 
             gameOver, 
+            gameFreeze,
             boardReset, 
+            playAgain,
+            changePlayers,
             stats};
 })();
 
 game.getPlayerNames();
 game.showPlayerNames();
 game.assignMark();
+game.assignScore();
+game.showPlayerScores();
 game.playerMoves();
+game.playAgain();
+game.changePlayers();
 game.stats();
 
 
